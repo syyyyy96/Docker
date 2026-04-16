@@ -1,10 +1,12 @@
 services:
   api:
-    build: .
+    build: ./api
     ports:
       - "8000:8000"
     depends_on:
       - db
+    volumes:
+      - ./api:/app
 
   db:
     image: mysql:8.0
@@ -13,3 +15,13 @@ services:
       MYSQL_DATABASE: app_db
     ports:
       - "33061:3306"
+    volumes:
+      - local_db:/var/lib/mysql
+
+  worker: 
+    build: ./worker
+    volumes:
+      - ./worker:/app
+
+volumes:
+  local_db:
